@@ -1,0 +1,47 @@
+{
+    "description": "Provides graphql functionality to symfony projects",
+    "name": "d3mo17/colja",
+    "version": "0.9.0",
+    "type": "symfony-bundle",
+    "license": "mit",
+    "keywords": ["graphql"],
+    "authors": [
+      {
+        "name": "Daniel Moritz"
+      }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "guzzlehttp/guzzle": "~6.0",
+        "leocavalcante/siler": "1.7.8",
+        "symfony/config": "^3.4|^4.0",
+        "symfony/console": "^3.4|^4.0",
+        "symfony/dependency-injection": "^3.4|^4.0",
+        "symfony/filesystem": "^3.4|^4.0",
+        "symfony/finder": "^3.4|^4.0",
+        "symfony/framework-bundle": "^3.4|^4.0",
+        "symfony/http-kernel": "^3.4|^4.0",
+        "webonyx/graphql-php": "^14.0"
+    },
+    "suggest": {
+      "doctrine/orm": "Required to use AbstractEntityResolver, which provides some common methods to interact with a database."
+    },
+    "require-dev": {
+      "symfony/phpunit-bridge": "^3.4|^4.0",
+      "symfony/process": "^3.4|^4.0",
+      "symfony/yaml": "^3.4|^4.0"
+    },
+    "config": {
+      "preferred-install": "dist",
+      "sort-packages": true
+    },
+    "autoload": {
+      "psr-4": { "DMo\\Colja\\": "" }
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
+    }
+}

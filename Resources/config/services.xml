@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" autoconfigure="true" />
+        <service id="DMo\Colja\GraphQL\Client">
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="DMo\Colja\GraphQL\ResolverManager" />
+        <service id="DMo\Colja\Controller\GraphQLController" public="true">
+            <argument type="service" id="DMo\Colja\GraphQL\ResolverManager" />
+        </service>
+        <service id="DMo\Colja\EventListener\ExceptionListener" public="true">
+            <tag name="kernel.event_listener" event="kernel.exception" />
+        </service>
+    </services>
+</container>

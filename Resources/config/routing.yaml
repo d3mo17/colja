@@ -1,0 +1,8 @@
+d_mo_colja_endpoint:
+    path:       /graphql
+    controller: DMo\Colja\Controller\GraphQLController::endpoint
+    methods:    POST
+d_mo_colja_schema:
+    path:       /graphql
+    controller: DMo\Colja\Controller\GraphQLController::options
+    methods:    OPTIONS
