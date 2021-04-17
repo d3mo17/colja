@@ -1,9 +1,14 @@
 # Colja
 
 A Symfony bundle to bring functionality of [Siler](https://github.com/leocavalcante/siler/) to Symfony.
+Per default GraphQL requests (method POST) will be handled on request-uri `/graphql`.
 
+\
+&nbsp;
 
 ## Setup Example
+
+See also [Colja examples](https://github.com/d3mo17/colja-examples/) for more information
 
 ```
 a-symfony-project/
@@ -11,19 +16,16 @@ a-symfony-project/
 ├─ config/
 │  ├─ graphql/
 │  │  ├─ base.schema
-│  │  ├─ entityDemo.schema
 │  ├─ packages/
 │  │  ├─ .../
 │  │  ├─ d_mo_colja.yaml
 │  │  ├─ ...
+|  ├─ bundles.php
+│  ├─ .../
 ├─ src/
 │  ├─ Controller/
 │  ├─ .../
-│  ├─ Entity/
-│  │  ├─ ColjaEntity.php
-│  │  ├─ ...
 │  ├─ GraphQL/
-│  │  ├─ DemoEntityResolver.php
 │  │  ├─ DemoResolver.php
 │  │  ├─ ...
 ├─ ...
@@ -39,18 +41,6 @@ type Query {
 }
 ```
 
-### entityDemo.schema
-```graphql
-extend type Query {
-    getEntity(id: ID!): ColjaEntity
-}
-
-type ColjaEntity {
-    id: ID!,
-    name: String
-}
-```
-
 ### d_mo_colja.yaml
 ```yaml
 d_mo_colja:
@@ -62,75 +52,18 @@ d_mo_colja:
     demoArgs:
       class: App\GraphQL\DemoResolver
       method: demoWithArguments
-  extensions:
-    - schema: config/graphql/entityDemo.schema
-      query:
-        getEntity:
-          class: App\GraphQL\DemoEntityResolver
-          method: getColjaEntity
-
 ```
 
-### ColjaEntity.php
+### bundles.php
 ```php
 <?php
 
-namespace App\Entity;
+return [
+    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
+    // ...
+    DMo\Colja\DMoColjaBundle::class => ['all' => true],
+];
 
-class ColjaEntity
-{
-    private $id;
-
-    private $name;
-
-    public function __construct(string $name)
-    {
-        $this->id = sha1(microtime());
-        $this->name = $name;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-}
-```
-
-### DemoEntityResolver.php
-```php
-<?php
-
-namespace App\GraphQL;
-
-use DMo\Colja\GraphQL\AbstractEntityResolver;
-use App\Entity\ColjaEntity;
-
-class DemoEntityResolver extends AbstractEntityResolver
-{
-    protected function structure($entity): array
-    {
-        return [
-            'id' => $entity->getId(),
-            'name' => $entity->getName()
-        ];
-    }
-
-    protected function getEntityClassname(): string
-    {
-        return ColjaEntity::class;
-    }
-
-    public function getColjaEntity(array $root = null, array $args): array
-    {
-        $entity = new ColjaEntity('The name!');
-        return $this->structure($entity);
-    }
-}
 ```
 
 ### DemoResolver.php

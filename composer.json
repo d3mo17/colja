@@ -1,10 +1,10 @@
 {
-    "description": "Provides graphql functionality to symfony projects",
+    "description": "Provides GraphQL functionality to symfony projects",
     "name": "d3mo17/colja",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "type": "symfony-bundle",
     "license": "mit",
-    "keywords": ["graphql"],
+    "keywords": ["symfony", "siler", "graphql"],
     "authors": [
       {
         "name": "Daniel Moritz"
