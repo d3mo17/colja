@@ -1,7 +1,48 @@
 # Colja
 
-A Symfony bundle to bring functionality of [Siler](https://github.com/leocavalcante/siler/) to Symfony.
+A Symfony bundle to provide GraphQL functionality (by the use of [Siler](https://github.com/leocavalcante/siler/)).
 Per default GraphQL requests (method POST) will be handled on request-uri `/graphql`.
+
+\
+&nbsp;
+
+## Schema
+There has to be defined one basic schema file in GraphQL Schema Definition Language ([SDL](https://graphql.org/learn/schema/)). The path to this file has to be configured in the `d_mo_colja.yaml`-file (see [here](https://github.com/d3mo17/colja-examples/blob/master/config/packages/d_mo_colja.yaml#L2)).
+
+The basic schema file can be extended by multiple more files (see [here](https://github.com/d3mo17/colja-examples/blob/master/config/packages/d_mo_colja.yaml#L11)).
+
+To link a query or mutation (field) from the schema to a resolver callable in php you have to [configure a classname and a method with the specified fieldname](https://github.com/d3mo17/colja-examples/blob/master/config/packages/d_mo_colja.yaml#L4-L6)
+
+\
+&nbsp;
+
+## Resolvers
+A class which contains field resolvers, must extend the Class `DMo\Colja\GraphQL\AbstractResolver`. This is because the `ResolverManager` will be injected into each Resolver, so through this you will be able to get the symfony controller and container.
+
+All Resolvers (callable functions) can be defined to expect four parameters:
+  - `$root`
+  - `$args`
+  - `$context`
+  - `$info`
+
+The most important parameter is the second one: `$args`. It contains all arguments passed to a field.
+
+Each Resolver can return a scalar value or an associative array. The array values can contain scalars or function references which act as field resolvers by themselves.
+
+All field values which need to be "lazy-loaded" must be defined as resolver, because a resolver will only be called if the corresponding field was requested in a query.
+You can also realize recursive data structures with this technique (see [example here](https://github.com/d3mo17/colja-examples/blob/master/src/GraphQL/DemoEntityResolver.php#L16-L33)).
+
+\
+&nbsp;
+
+## GET-Requests
+By default this bundle only supports the request method POST. But you can easily add support for the method GET. Just place the following in the `routes.yaml` of your symfony project:
+```
+d_mo_colja_endpoint_get:
+    path:       /graphql
+    controller: DMo\Colja\Controller\GraphQLController::endpoint
+    methods:    GET
+```
 
 \
 &nbsp;
