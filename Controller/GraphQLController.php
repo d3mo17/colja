@@ -6,7 +6,6 @@ use DMo\Colja\GraphQL\ResolverManagerInterface;
 use GraphQL\Error\DebugFlag;
 use GraphQL\GraphQL;
 use GraphQL\Language\Parser;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
 use GraphQL\Utils\SchemaExtender;
 use Siler\GraphQL as SGQL;
@@ -119,7 +118,16 @@ class GraphQLController extends AbstractController
             ->setContainer($this->container);
 
         SGQL\resolvers($this->resolverManager->getResolvers());
-        $input     = json_decode($request->getContent(), true);
+        if ($request->isMethod('get')) {
+            $input = $request->query->all();
+        } elseif ($request->headers->contains('content-type', 'application/graphql')) {
+            $input = [];
+            parse_str($request->getContent(), $input);
+        } elseif ($request->request->has('query')) {
+            $input = $request->request->all();
+        } else {
+            $input = json_decode($request->getContent(), true);
+        }
 
         $query     = array_get($input, 'query');
         $rootValue = null;
